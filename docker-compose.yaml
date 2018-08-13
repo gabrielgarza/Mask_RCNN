@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  app:
+    image: waleedka/modern-deep-learning
+    volumes:
+      - .:/host
+    ports:
+      - "8888:8888"
+      - "6006:6006"
+    stdin_open: true
+    tty: true
