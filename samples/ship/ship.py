@@ -96,6 +96,7 @@ class ShipDataset(utils.Dataset):
 
         # Load image ids (filenames) and run length encoded pixels
         ship_segmentations_df = pd.read_csv(os.path.join(dataset_dir, "{}_ship_segmentations.csv".format(subset)))
+        ship_segmentations_df = ship_segmentations_df.sample(frac=0.01)
         unique_image_ids = ship_segmentations_df.ImageId.unique()
 
         for image_id in unique_image_ids:

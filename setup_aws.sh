@@ -1,6 +1,10 @@
 #!/bin/bash
 
+# Remember to first configure awscli with credentials before running this file
+
 # Clone repo
+git config --global credential.helper '!aws codecommit credential-helper $@'
+git config --global credential.UseHttpPath true
 git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/Mask_RCNN
 
 # Download datasets from s3
