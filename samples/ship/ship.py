@@ -12,13 +12,13 @@ Usage: import the module (see Jupyter notebooks for examples), or run from
        the command line as such:
 
     # Train a new model starting from pre-trained COCO weights
-    python3 ship.py train --dataset=/path/to/ship/dataset --weights=coco
+    python3 ship.py train --dataset=./datasets --weights=coco
 
     # Resume training a model that you had trained earlier
-    python3 ship.py train --dataset=/path/to/ship/dataset --weights=last
+    python3 ship.py train --dataset=./datasets --weights=last
 
     # Train a new model starting from ImageNet weights
-    python3 ship.py train --dataset=/path/to/ship/dataset --weights=imagenet
+    python3 ship.py train --dataset=./datasets --weights=imagenet
 
     # Apply color splash to an image
     python3 ship.py splash --weights=/path/to/weights/file.h5 --image=<URL or path to file>
