@@ -33,6 +33,7 @@ import json
 import datetime
 import numpy as np
 import pandas as pd
+from skimage.morphology import label
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
@@ -112,20 +113,6 @@ class ShipDataset(utils.Dataset):
                     width=768, height=768,
                     img_masks=img_masks)
 
-        # for index, row in ship_segmentations_df.iterrows():
-        #     image_id = row["ImageId"]
-        #     encoded_pixels = row["EncodedPixels"]
-        #
-        #     image_path = os.path.join(dataset_dir, image_id)
-        #
-        #     if os.path.isfile(image_path):
-        #         self.add_image(
-        #             "ship",
-        #             image_id=image_id,  # use file name as a unique image id
-        #             path=image_path,
-        #             width=768, height=768,
-        #             encoded_pixels=encoded_pixels)
-
     def load_mask(self, image_id):
         """Generate instance masks for an image.
        Returns:
@@ -160,12 +147,12 @@ class ShipDataset(utils.Dataset):
         else:
             super(self.__class__, self).image_reference(image_id)
 
-    def rle_encode(self, img):
+    def rle_encode(self,img):
         '''
         img: numpy array, 1 - mask, 0 - background
         Returns run length as string formated
         '''
-        pixels = img.flatten()
+        pixels = img.T.flatten()
         pixels = np.concatenate([[0], pixels, [0]])
         runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
         runs[1::2] -= runs[::2]
@@ -187,6 +174,64 @@ class ShipDataset(utils.Dataset):
             img[lo:hi] = 1
         return img.reshape(shape).T
 
+    def multi_rle_encode(self, mask_array):
+        # Go back from Bitmask to RLE
+        re_encoded_to_rle_list = []
+        for i in np.arange(mask_array.shape[-1]):
+            boolean_mask = mask_array[:,:,i]
+            re_encoded_to_rle = self.rle_encode(boolean_mask)
+            re_encoded_to_rle_list.append(re_encoded_to_rle)
+
+        return re_encoded_to_rle_list
+
+    def multi_rle_decode(self, rle_img_masks):
+        # Build mask array
+        mask_array = np.zeros([768, 768, len(rle_img_masks)],dtype=np.uint8)
+
+        # Go from RLE to Bitmask
+        for index, rle_mask in enumerate(rle_img_masks):
+            mask_array[:,:,index] = self.rle_decode(rle_mask)
+
+        return mask_array
+
+    def test_endcode_decode(self):
+        ROOT_DIR = os.path.abspath("../../")
+        SHIP_DIR = os.path.join(ROOT_DIR, "./samples/ship/datasets")
+        ship_segmentations_df = pd.read_csv(os.path.join(SHIP_DIR,"train_val","train_ship_segmentations.csv"))
+        rle_img_masks = ship_segmentations_df.loc[ship_segmentations_df['ImageId'] == "0005d01c8.jpg", 'EncodedPixels']
+        rle_img_masks_list = rle_img_masks.tolist()
+
+        mask_array = self.multi_rle_decode(rle_img_masks)
+        print("mask_array shape", mask_array.shape)
+        # re_encoded_to_rle_list = self.multi_rle_encode(mask_array)
+        re_encoded_to_rle_list = []
+        for i in np.arange(mask_array.shape[-1]):
+            boolean_mask = mask_array[:,:,i]
+            re_encoded_to_rle = self.rle_encode(boolean_mask)
+            re_encoded_to_rle_list.append(re_encoded_to_rle)
+
+        print("Masks Match?", re_encoded_to_rle_list == rle_img_masks_list)
+        print("Mask Count: ", len(rle_img_masks))
+        print("rle_img_masks_list", rle_img_masks_list)
+        print("re_encoded_to_rle_list", re_encoded_to_rle_list)
+
+        # Check if re encoded rle masks are the same as the original ones
+        return re_encoded_to_rle_list == rle_img_masks_list
+
+    def masks_as_image(self,in_mask_list):
+        # Take the individual ship masks and create a single mask array for all ships
+        all_masks = np.zeros((768, 768), dtype = np.uint8)
+        for mask in in_mask_list:
+            if isinstance(mask, str):
+                all_masks |= self.rle_decode(mask)
+        return all_masks
+
+    def multi_rle_encode(self,img):
+        labels = label(img)
+        if img.ndim > 2:
+            return [self.rle_encode(np.sum(labels==k, axis=2)) for k in np.unique(labels[labels>0])]
+        else:
+            return [self.rle_encode(labels==k) for k in np.unique(labels[labels>0])]
 
 def train(model):
     """Train the model."""
