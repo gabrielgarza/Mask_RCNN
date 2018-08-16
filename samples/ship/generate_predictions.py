@@ -60,15 +60,17 @@ sample_sub_csv = "sample_submission.csv"
 sample_submission_df = pd.read_csv(os.path.join(images_path,sample_sub_csv))
 unique_image_ids = sample_submission_df.ImageId.unique()
 
+# Start counting prediction time
+tic = time.clock()
+
 out_pred_rows = []
 for image_id in unique_image_ids:
     image_path = os.path.join(images_path, image_id)
     if os.path.isfile(image_path):
-        tic = time.clock()
+
         image = skimage.io.imread(image_path)
         results = model.detect([image], verbose=1)
         r = results[0]
-        print("Scores",r['scores'])
 
         re_encoded_to_rle_list = []
         for i in np.arange(np.array(r['masks']).shape[-1]):
@@ -82,15 +84,15 @@ for image_id in unique_image_ids:
             for rle_mask in re_encoded_to_rle_list:
                 out_pred_rows += [{'ImageId': image_id, 'EncodedPixels': rle_mask}]
 
-        toc = time.clock()
-        print("Prediction time: ",toc-tic)
 
-print(out_pred_rows)
 
 submission_df = pd.DataFrame(out_pred_rows)[['ImageId', 'EncodedPixels']]
 
 filename = "{}{:%Y%m%dT%H%M}.csv".format("submission_", datetime.datetime.now())
 submission_df.to_csv(filename, index=False)
+
+toc = time.clock()
+print("Prediction time: ",toc-tic)
 print("Submission CSV Shape", submission_df.shape)
 
 # print("ROIS",r['rois'])
