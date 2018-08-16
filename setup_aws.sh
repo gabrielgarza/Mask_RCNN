@@ -12,12 +12,14 @@ mkdir ./samples/ship/datasets
 mkdir ./samples/ship/datasets/train_val
 mkdir ./samples/ship/datasets/train
 mkdir ./samples/ship/datasets/val
+mkdir ./samples/ship/datasets/test
 aws s3 cp s3://airbus-kaggle/train.zip ./samples/ship/datasets/train_val/
-aws s3 cp s3://airbus-kaggle/test.zip ./samples/ship/datasets/train_val/
+aws s3 cp s3://airbus-kaggle/test.zip ./samples/ship/datasets/test/
 aws s3 cp s3://airbus-kaggle/train_ship_segmentations.csv.zip ./samples/ship/datasets/train_val/
-aws s3 cp s3://airbus-kaggle/sample_submission.csv.zip ./samples/ship/datasets/train_val/
+aws s3 cp s3://airbus-kaggle/sample_submission.csv.zip ./samples/ship/datasets/test/
 unzip ./samples/ship/datasets/train_val/train_ship_segmentations.csv.zip -d ./samples/ship/datasets/train_val/
 unzip -q ./samples/ship/datasets/train_val/train.zip -d ./samples/ship/datasets/train_val/
+unzip -q ./samples/ship/datasets/test/test.zip -d ./samples/ship/datasets/test/
 
 # Split dataset into train and val folders
 python3 ./samples/ship/split_train_val.py

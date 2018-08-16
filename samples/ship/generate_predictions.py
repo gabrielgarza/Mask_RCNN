@@ -1,6 +1,7 @@
 import pandas
 import math
 import re
+import datetime
 import time
 import numpy as np
 import tensorflow as tf
@@ -52,14 +53,18 @@ class_names = ['BG', 'ship']
 
 # Run detection
 # Load image ids (filenames) and run length encoded pixels
-sample_submission_df = pd.read_csv(os.path.join("datasets","val","val_ship_segmentations.csv"))
+images_path = "datasets/test"
+sample_sub_csv = "sample_submission.csv"
+# images_path = "datasets/val"
+# sample_sub_csv = "val_ship_segmentations.csv"
+sample_submission_df = pd.read_csv(os.path.join(images_path,sample_sub_csv))
 unique_image_ids = sample_submission_df.ImageId.unique()
 
 out_pred_rows = []
 for image_id in unique_image_ids:
-
-    image_path = os.path.join("datasets","val",image_id)
+    image_path = os.path.join(images_path, image_id)
     if os.path.isfile(image_path):
+        tic = time.clock()
         image = skimage.io.imread(image_path)
         results = model.detect([image], verbose=1)
         r = results[0]
@@ -77,10 +82,16 @@ for image_id in unique_image_ids:
             for rle_mask in re_encoded_to_rle_list:
                 out_pred_rows += [{'ImageId': image_id, 'EncodedPixels': rle_mask}]
 
+        toc = time.clock()
+        print("Prediction time: ",toc-tic)
+
+print(out_pred_rows)
 
 submission_df = pd.DataFrame(out_pred_rows)[['ImageId', 'EncodedPixels']]
-submission_df.to_csv('submission.csv', index=False)
-submission_df.sample(3)
+
+filename = "{}{:%Y%m%dT%H%M}.csv".format("submission_", datetime.datetime.now())
+submission_df.to_csv(filename, index=False)
+print("Submission CSV Shape", submission_df.shape)
 
 # print("ROIS",r['rois'])
 # print("Masks",r['masks'])
