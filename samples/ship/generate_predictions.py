@@ -36,7 +36,7 @@ SHIP_DIR = os.path.join(ROOT_DIR, "/samples/ship/datasets")
 class InferenceConfig(config.__class__):
     # Run detection on one image at a time
     GPU_COUNT = 1
-    IMAGES_PER_GPU = 1
+    IMAGES_PER_GPU = 2
 
 # Create model object in inference mode.
 config = InferenceConfig()
@@ -63,10 +63,12 @@ unique_image_ids = sample_submission_df.ImageId.unique()
 tic = time.clock()
 
 out_pred_rows = []
+count = 0
 for image_id in unique_image_ids:
     image_path = os.path.join(images_path, image_id)
     if os.path.isfile(image_path):
-
+        count += 1
+        print("Image: ", count)
         image = skimage.io.imread(image_path)
         results = model.detect([image], verbose=1)
         r = results[0]
