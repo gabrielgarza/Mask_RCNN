@@ -36,7 +36,7 @@ SHIP_DIR = os.path.join(ROOT_DIR, "/samples/ship/datasets")
 class InferenceConfig(config.__class__):
     # Run detection on one image at a time
     GPU_COUNT = 1
-    IMAGES_PER_GPU = 1
+    IMAGES_PER_GPU = 2
 
 # Create model object in inference mode.
 config = InferenceConfig()
@@ -59,33 +59,51 @@ sample_sub_csv = "sample_submission.csv"
 sample_submission_df = pd.read_csv(os.path.join(images_path,sample_sub_csv))
 unique_image_ids = sample_submission_df.ImageId.unique()
 
+
+
 out_pred_rows = []
 count = 0
-for image_id in unique_image_ids:
-    image_path = os.path.join(images_path, image_id)
-    if os.path.isfile(image_path):
+for image_id_1, image_id_2 in zip(unique_image_ids[0::2], unique_image_ids[1::2]):
+    image_path_1 = os.path.join(images_path, image_id_1)
+    image_path_2 = os.path.join(images_path, image_id_2)
+    if os.path.isfile(image_path_1) and os.path.isfile(image_path_2):
         count += 1
         print("Step: ", count)
 
         # Start counting prediction time
         tic = time.clock()
 
-        image = skimage.io.imread(image_path)
-        results = model.detect([image], verbose=1)
-        r = results[0]
+        image_1 = skimage.io.imread(image_path_1)
+        image_2 = skimage.io.imread(image_path_2)
+        results = model.detect([image_1, image_2], verbose=1)
+        r0 = results[0]
+        r1 = results[1]
 
         # First Image
         re_encoded_to_rle_list = []
-        for i in np.arange(np.array(r['masks']).shape[-1]):
-            boolean_mask = r['masks'][:,:,i]
+        for i in np.arange(np.array(r0['masks']).shape[-1]):
+            boolean_mask = r0['masks'][:,:,i]
             re_encoded_to_rle = dataset.rle_encode(boolean_mask)
             re_encoded_to_rle_list.append(re_encoded_to_rle)
 
         if len(re_encoded_to_rle_list) == 0:
-            out_pred_rows += [{'ImageId': image_id, 'EncodedPixels': None}]
+            out_pred_rows += [{'ImageId': image_id_1, 'EncodedPixels': None}]
         else:
             for rle_mask in re_encoded_to_rle_list:
-                out_pred_rows += [{'ImageId': image_id, 'EncodedPixels': rle_mask}]
+                out_pred_rows += [{'ImageId': image_id_1, 'EncodedPixels': rle_mask}]
+
+        # Second Image
+        re_encoded_to_rle_list = []
+        for i in np.arange(np.array(r1['masks']).shape[-1]):
+            boolean_mask = r1['masks'][:,:,i]
+            re_encoded_to_rle = dataset.rle_encode(boolean_mask)
+            re_encoded_to_rle_list.append(re_encoded_to_rle)
+
+        if len(re_encoded_to_rle_list) == 0:
+            out_pred_rows += [{'ImageId': image_id_2, 'EncodedPixels': None}]
+        else:
+            for rle_mask in re_encoded_to_rle_list:
+                out_pred_rows += [{'ImageId': image_id_2, 'EncodedPixels': rle_mask}]
 
         toc = time.clock()
         print("Prediction time: ",toc-tic)
