@@ -70,7 +70,7 @@ class ShipConfig(Config):
     NUM_CLASSES = 1 + 1  # Background + ship
 
     # Number of training steps per epoch
-    STEPS_PER_EPOCH = 100
+    STEPS_PER_EPOCH = 300
 
     # Skip detections with < 95% confidence
     DETECTION_MIN_CONFIDENCE = 0.95
@@ -96,7 +96,7 @@ class ShipDataset(utils.Dataset):
 
         # Load image ids (filenames) and run length encoded pixels
         ship_segmentations_df = pd.read_csv(os.path.join(dataset_dir, "{}_ship_segmentations.csv".format(subset)))
-        ship_segmentations_df = ship_segmentations_df.sample(frac=0.01)
+        ship_segmentations_df = ship_segmentations_df.sample(frac=0.05)
         unique_image_ids = ship_segmentations_df.ImageId.unique()
 
         for image_id in unique_image_ids:
@@ -252,7 +252,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=30,
+                epochs=50,
                 layers='heads')
 
 def color_splash(image, mask):
