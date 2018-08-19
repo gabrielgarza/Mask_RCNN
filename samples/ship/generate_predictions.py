@@ -38,6 +38,7 @@ class InferenceConfig(config.__class__):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
     DETECTION_MIN_CONFIDENCE = 0.95
+    DETECTION_NMS_THRESHOLD = 0.0
 
 # Create model object in inference mode.
 config = InferenceConfig()
