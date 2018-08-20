@@ -15,7 +15,7 @@ Usage: import the module (see Jupyter notebooks for examples), or run from
     python3 ship.py train --dataset=./datasets --weights=coco
 
     # Resume training a model that you had trained earlier
-    python3 ship.py train --dataset=./datasets --weights=../../logs/ship20180815T0023/mask_rcnn_ship_0030.h5
+    python3 ship.py train --dataset=./datasets --weights=../../logs/ship20180815T0023/mask_rcnn_ship_0067.h5
 
     # Train a new model starting from ImageNet weights
     python3 ship.py train --dataset=./datasets --weights=imagenet
