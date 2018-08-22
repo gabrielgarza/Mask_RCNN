@@ -76,5 +76,9 @@ RUN pip3 install --no-cache-dir --upgrade h5py pydot_ng keras
 # but it doesn't seem to be active anymore.
 RUN pip3 install --no-cache-dir git+https://github.com/waleedka/coco.git#subdirectory=PythonAPI
 
+COPY setup_project_and_data.sh ./
+COPY train.sh ./
+
+
 WORKDIR "/root"
 CMD ["/bin/bash"]

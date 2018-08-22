@@ -7,6 +7,9 @@ git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
 git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/Mask_RCNN
 
+# Create submissions folder
+mkdir ./submissions
+
 # Download datasets from s3
 mkdir ./samples/ship/datasets
 mkdir ./samples/ship/datasets/train_val
@@ -25,8 +28,8 @@ unzip -q ./samples/ship/datasets/test/test.zip -d ./samples/ship/datasets/test/
 python3 ./samples/ship/split_train_val.py
 
 # Log into ecr and pull image
-$(aws ecr get-login --no-include-email --region us-east-1)
-docker pull 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu:latest
+# $(aws ecr get-login --no-include-email --region us-east-1)
+# docker pull 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu:latest
 
 # Command to run docker here for convenience as a comment
 # docker run -it -p 8888:8888 -p 6006:6006 -v ~/.:/host 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu

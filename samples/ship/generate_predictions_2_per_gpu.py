@@ -113,7 +113,7 @@ for image_id_1, image_id_2 in zip(unique_image_ids[0::2], unique_image_ids[1::2]
 
 submission_df = pd.DataFrame(out_pred_rows)[['ImageId', 'EncodedPixels']]
 
-filename = "{}{:%Y%m%dT%H%M}.csv".format("submission_", datetime.datetime.now())
+filename = "{}{:%Y%m%dT%H%M}.csv".format("./submissions/submission_", datetime.datetime.now())
 submission_df.to_csv(filename, index=False)
 
 
