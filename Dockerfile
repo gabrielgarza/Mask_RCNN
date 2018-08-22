@@ -1,9 +1,6 @@
 FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 MAINTAINER Gabriel Garza <garzagabriel@gmail.com>
 
-ARG TENSORFLOW_VERSION=1.6.0
-ARG TENSORFLOW_ARCH=gpu
-
 # Essentials: developer tools, build tools, OpenBLAS
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils git curl vim unzip openssh-client wget \
@@ -76,10 +73,8 @@ RUN pip3 install --no-cache-dir --upgrade h5py pydot_ng keras
 # but it doesn't seem to be active anymore.
 RUN pip3 install --no-cache-dir git+https://github.com/waleedka/coco.git#subdirectory=PythonAPI
 
-COPY setup_project_and_data.sh /usr/local/bin/
-COPY train.sh /usr/local/bin/
-COPY predict.sh /usr/local/bin/
+COPY setup_project_and_data.sh /home
+COPY train.sh /home
+COPY predict.sh /home
 
-
-WORKDIR "/root"
-CMD ["/bin/bash"]
+WORKDIR "/home"
