@@ -22,7 +22,7 @@ echo Finished training
 # Upload weights to s3
 trained_weights = ls ./Mask_RCNN/logs/weights/ | tail -n 1
 trained_weights_path = "./Mask_RCNN/logs/weights/$last_weights"
-echo Uploading to s3...
+echo Uploading weights to s3...
 aws s3 cp $trained_weights_path s3://airbus-kaggle/weights
 echo Uploaded trained weights to s3
 
