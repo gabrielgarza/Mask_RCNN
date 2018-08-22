@@ -9,35 +9,29 @@ git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
 git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/Mask_RCNN
 
-# Create submissions folder
-mkdir ./samples/ship/submissions
-echo Created submissions folder
-
 # Download datasets from s3
 echo Downloading dataset...
-mkdir ./samples/ship/datasets
-mkdir ./samples/ship/datasets/train_val
-mkdir ./samples/ship/datasets/train
-mkdir ./samples/ship/datasets/val
-mkdir ./samples/ship/datasets/test
-aws s3 cp s3://airbus-kaggle/train.zip ./samples/ship/datasets/train_val/
-aws s3 cp s3://airbus-kaggle/test.zip ./samples/ship/datasets/test/
-aws s3 cp s3://airbus-kaggle/train_ship_segmentations.csv.zip ./samples/ship/datasets/train_val/
-aws s3 cp s3://airbus-kaggle/sample_submission.csv.zip ./samples/ship/datasets/test/
-echo Unziping dataset...
-unzip ./samples/ship/datasets/train_val/train_ship_segmentations.csv.zip -d ./samples/ship/datasets/train_val/
-unzip -q ./samples/ship/datasets/train_val/train.zip -d ./samples/ship/datasets/train_val/
-unzip -q ./samples/ship/datasets/test/test.zip -d ./samples/ship/datasets/test/
+mkdir -p ./Mask_RCNN/samples/ship/datasets
+mkdir -p ./Mask_RCNN/samples/ship/datasets/train_val
+mkdir -p ./Mask_RCNN/samples/ship/datasets/train
+mkdir -p ./Mask_RCNN/samples/ship/datasets/val
+aws s3 cp s3://airbus-kaggle/train.zip ./Mask_RCNN/samples/ship/datasets/train_val/
+aws s3 cp s3://airbus-kaggle/train_ship_segmentations.csv.zip ./Mask_RCNN/samples/ship/datasets/train_val/
+echo Unziping train_ship_segmentations...
+unzip ./Mask_RCNN/samples/ship/datasets/train_val/train_ship_segmentations.csv.zip -d ./Mask_RCNN/samples/ship/datasets/train_val/
+echo Unziping train...
+unzip -q ./Mask_RCNN/samples/ship/datasets/train_val/train.zip -d ./Mask_RCNN/samples/ship/datasets/train_val/
+
 
 # Split dataset into train and val folders
 echo Splitting train and val sets...
-python3 ./samples/ship/split_train_val.py
+python3 ./Mask_RCNN/samples/ship/split_train_val.py
 
 
-mkdir ./logs/weights/
+mkdir -p ./Mask_RCNN/logs/weights/
 KEY=`aws s3 ls s3://airbus-kaggle/weights --recursive | sort | tail -n 1 | awk '{print $4}'`
 echo "Downloading weights... $KEY"
-aws s3 cp s3://airbus-kaggle/$KEY ./logs/weights/
+aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/weights/
 
 echo Done with setup!
 

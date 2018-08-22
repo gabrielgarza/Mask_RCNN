@@ -10,15 +10,15 @@ echo Finished data setup
 # Train
 # Weights directory $1 ../../logs/ship20180815T0023
 # Get last weights file i.e. mask_rcnn_ship_0067.h5
-last_weights = ls ./logs/weights/ | tail -n 1
-weights_path = "./logs/weights/$last_weights"
+last_weights = ls ./Mask_RCNN/logs/weights/ | tail -n 1
+weights_path = "./Mask_RCNN/logs/weights/$last_weights"
 echo Training, staring with weights $last_weights
-python3 ./samples/ship/ship.py train --dataset=./datasets --weights=$weights_path
+python3 ./Mask_RCNN/samples/ship/ship.py train --dataset=./datasets --weights=$weights_path
 echo Finished training
 
 # Upload weights to s3
-trained_weights = ls ./logs/weights/ | tail -n 1
-trained_weights_path = "./logs/weights/$last_weights"
+trained_weights = ls ./Mask_RCNN/logs/weights/ | tail -n 1
+trained_weights_path = "./Mask_RCNN/logs/weights/$last_weights"
 echo Uploading to s3...
 aws s3 cp $trained_weights_path s3://airbus-kaggle/weights
 echo Uploaded trained weights to s3

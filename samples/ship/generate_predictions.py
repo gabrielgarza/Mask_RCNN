@@ -25,7 +25,7 @@ from samples.ship import ship
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Path to trained weights
-SHIP_WEIGHTS_PATH = "./logs/ship20180815T0023/mask_rcnn_ship_0067.h5"
+SHIP_WEIGHTS_PATH = "./logs/weights/mask_rcnn_ship_0068.h5"
 
 # Config
 config = ship.ShipConfig()
