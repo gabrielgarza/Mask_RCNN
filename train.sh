@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Download data, create train and val sets
-echo Download and setup data...
-./setup_project_and_data.sh
-echo Finished data setup
+# echo Download and setup data...
+# ./setup_project_and_data.sh
+# echo Finished data setup
 
 # Train
 # Weights directory $1 ../../logs/ship20180815T0023
