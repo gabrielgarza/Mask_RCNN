@@ -25,8 +25,7 @@ RUN pip3 --no-cache-dir install \
     numpy scipy sklearn scikit-image pandas matplotlib Cython requests pandas imgaug
 
 # Install AWS CLI
-RUN pip3 --no-cache-dir install \
-		    awscli --upgrade --user
+RUN pip3 --no-cache-dir install awscli --upgrade
 
 #
 # Jupyter Notebook

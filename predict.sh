@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo Starting inference...
 python3 generate_predictions.py

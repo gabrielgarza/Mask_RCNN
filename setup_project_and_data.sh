@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Remember to first configure awscli with credentials before running this file
+set -e
 
 # Clone repo
 echo Cloning repo...

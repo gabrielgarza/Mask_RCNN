@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Download data, create train and val sets
 echo Download and setup data...
