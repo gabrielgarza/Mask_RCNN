@@ -22,16 +22,17 @@ unzip ./Mask_RCNN/samples/ship/datasets/train_val/train_ship_segmentations.csv.z
 echo Unziping train...
 unzip -q ./Mask_RCNN/samples/ship/datasets/train_val/train.zip -d ./Mask_RCNN/samples/ship/datasets/train_val/
 
-
-# Split dataset into train and val folders
-echo Splitting train and val sets...
-python3 ./Mask_RCNN/samples/ship/split_train_val.py
-
-
 mkdir -p ./Mask_RCNN/logs/weights/
 KEY=`aws s3 ls s3://airbus-kaggle/weights --recursive | sort | tail -n 1 | awk '{print $4}'`
 echo "Downloading weights... $KEY"
 aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/weights/
+
+
+
+# Split dataset into train and val folders
+echo Splitting train and val sets...
+cd /Mask_RCNN/samples/ship
+python3 split_train_val.py
 
 echo Done with setup!
 

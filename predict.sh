@@ -32,3 +32,5 @@ echo Finished inference
 echo "Uploading submission to s3..."
 aws s3 cp ./Mask_RCNN/samples/ship/submissions  s3://airbus-kaggle/submissions --recursive
 echo Uploaded submission to s3
+
+# sudo docker run -it 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu bash ./predict.sh
