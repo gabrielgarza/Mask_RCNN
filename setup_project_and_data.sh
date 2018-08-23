@@ -22,11 +22,17 @@ unzip ./Mask_RCNN/samples/ship/datasets/train_val/train_ship_segmentations.csv.z
 echo Unziping train...
 unzip -q ./Mask_RCNN/samples/ship/datasets/train_val/train.zip -d ./Mask_RCNN/samples/ship/datasets/train_val/
 
-mkdir -p ./Mask_RCNN/logs/ship20180815T0023/
-KEY=`aws s3 ls s3://airbus-kaggle/weights --recursive | sort | tail -n 1 | awk '{print $4}'`
-echo "Downloading weights... $KEY"
-aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/ship20180815T0023/
 
+# Gets the latest folder and make the same directory locally
+# ship20180823T0000/
+LATEST_DIR=`aws s3 ls s3://airbus-kaggle/logs/ | grep / | sort | tail -n 1 | awk '{print $2}'`
+mkdir -p ./Mask_RCNN/logs/$LATEST_DIR
+
+# Gets the latest file from the latest directory in weights
+# logs/ship20180823T0000/mask_rcnn_ship_0001.h5
+KEY=`aws s3 ls s3://airbus-kaggle/logs/ --recursive | sort | tail -n 1 | awk '{print $4}'`
+echo "Downloading weights... $KEY"
+aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/$KEY
 
 
 # Split dataset into train and val folders
