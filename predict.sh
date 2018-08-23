@@ -15,10 +15,10 @@ unzip -q ./Mask_RCNN/samples/ship/datasets/test/sample_submission.csv.zip -d ./M
 echo Unziping test...
 unzip -q ./Mask_RCNN/samples/ship/datasets/test/test.zip -d ./Mask_RCNN/samples/ship/datasets/test/
 
-mkdir -p ./Mask_RCNN/logs/weights/
+mkdir -p ./Mask_RCNN/logs/ship20180815T0023/
 KEY=`aws s3 ls s3://airbus-kaggle/weights --recursive | sort | tail -n 1 | awk '{print $4}'`
 echo "Downloading weights... $KEY"
-aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/weights/
+aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/ship20180815T0023/
 
 # Create submissions folder
 mkdir -p ./Mask_RCNN/samples/ship/submissions
