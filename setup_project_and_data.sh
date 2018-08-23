@@ -31,7 +31,7 @@ aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/weights/
 
 # Split dataset into train and val folders
 echo Splitting train and val sets...
-cd /Mask_RCNN/samples/ship
+cd ./Mask_RCNN/samples/ship
 python3 split_train_val.py
 
 echo Done with setup!
