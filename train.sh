@@ -17,7 +17,7 @@ last_weights=`ls ../../logs/$last_directory/ | tail -n 1`
 last_weights_path="../../logs/$last_directory/$last_weights"
 echo Training, staring with weights $last_weights_path
 
-python3 ./ship.py train --dataset=./datasets --weights=$last_weights_path
+python3 ./ship.py train --dataset=./datasets --weights=last
 echo Finished training
 
 # Upload weights to s3
