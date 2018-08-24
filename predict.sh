@@ -1,17 +1,26 @@
 #!/bin/bash
 set -e
 
+# Clone repo
+echo Cloning repo...
+git config --global credential.helper '!aws codecommit credential-helper $@'
+git config --global credential.UseHttpPath true
+git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/Mask_RCNN
 
+# Download sample submission csv
 mkdir -p ./Mask_RCNN/samples/ship/datasets/test
 echo Downloading sample_submission...
 aws s3 cp s3://airbus-kaggle/sample_submission.csv.zip ./Mask_RCNN/samples/ship/datasets/test/
 
+# Download test set
 echo Downloading test.zip...
 aws s3 cp s3://airbus-kaggle/test.zip ./Mask_RCNN/samples/ship/datasets/test/
 
+# Unzip sample submission csv
 echo Unziping sample_submission...
 unzip -q ./Mask_RCNN/samples/ship/datasets/test/sample_submission.csv.zip -d ./Mask_RCNN/samples/ship/datasets/test/
 
+# Unzip test
 echo Unziping test...
 unzip -q ./Mask_RCNN/samples/ship/datasets/test/test.zip -d ./Mask_RCNN/samples/ship/datasets/test/
 
