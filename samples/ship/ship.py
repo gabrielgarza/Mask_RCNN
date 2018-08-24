@@ -80,7 +80,7 @@ class ShipConfig(Config):
 
     IMAGE_MIN_DIM = 768
     IMAGE_MAX_DIM = 768
-    
+
     # # Length of square anchor side in pixels
     # RPN_ANCHOR_SCALES = (32, 64, 128, 256, 512)
     #
@@ -268,7 +268,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=69,
+                epochs=120,
                 layers='heads')
 
 def color_splash(image, mask):
