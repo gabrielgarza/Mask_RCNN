@@ -75,6 +75,22 @@ class ShipConfig(Config):
     # Skip detections with < 95% confidence
     DETECTION_MIN_CONFIDENCE = 0.95
 
+    # Non-maximum suppression threshold for detection
+    DETECTION_NMS_THRESHOLD = 0.0
+
+    IMAGE_MIN_DIM = 768
+    IMAGE_MAX_DIM = 768
+    
+    # # Length of square anchor side in pixels
+    # RPN_ANCHOR_SCALES = (32, 64, 128, 256, 512)
+    #
+    # # Ratios of anchors at each cell (width/height)
+    # # A value of 1 represents a square anchor, and 0.5 is a wide anchor
+    # RPN_ANCHOR_RATIOS = [0.5, 1, 2]
+    #
+    # # Image mean (RGB)
+    # MEAN_PIXEL = np.array([123.7, 116.8, 103.9])
+
 
 ############################################################
 #  Dataset
@@ -252,7 +268,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=100,
+                epochs=69,
                 layers='heads')
 
 def color_splash(image, mask):
