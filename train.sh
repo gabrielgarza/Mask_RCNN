@@ -29,4 +29,4 @@ echo Uploading $trained_weights_path to s3...
 aws s3 cp $trained_weights_path s3://airbus-kaggle/logs/$trained_directory/
 echo Uploaded trained weights to s3
 
-# sudo docker run -it 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu bash ./train.sh
+# sudo docker run -it -p 6006:6006 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu bash ./train.sh

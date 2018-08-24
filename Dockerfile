@@ -22,7 +22,7 @@ RUN apt-get install -y --no-install-recommends libjpeg-dev zlib1g-dev && \
     pip3 --no-cache-dir install Pillow
 # Science libraries and other common packages
 RUN pip3 --no-cache-dir install \
-    numpy scipy sklearn scikit-image pandas matplotlib Cython requests pandas imgaug
+    numpy scipy sklearn scikit-image==0.13.1 pandas matplotlib Cython requests pandas imgaug
 
 # Install AWS CLI
 RUN pip3 --no-cache-dir install awscli --upgrade

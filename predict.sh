@@ -15,22 +15,28 @@ unzip -q ./Mask_RCNN/samples/ship/datasets/test/sample_submission.csv.zip -d ./M
 echo Unziping test...
 unzip -q ./Mask_RCNN/samples/ship/datasets/test/test.zip -d ./Mask_RCNN/samples/ship/datasets/test/
 
-mkdir -p ./Mask_RCNN/logs/ship20180815T0023/
-KEY=`aws s3 ls s3://airbus-kaggle/weights --recursive | sort | tail -n 1 | awk '{print $4}'`
+# Gets the latest folder and make the same directory locally
+# ship20180823T0000/
+LATEST_DIR=`aws s3 ls s3://airbus-kaggle/logs/ | grep / | sort | tail -n 1 | awk '{print $2}'`
+mkdir -p ./Mask_RCNN/logs/$LATEST_DIR
+
+# Gets the latest file from the latest directory in weights
+# logs/ship20180823T0000/mask_rcnn_ship_0001.h5
+KEY=`aws s3 ls s3://airbus-kaggle/logs/ --recursive | sort | tail -n 1 | awk '{print $4}'`
 echo "Downloading weights... $KEY"
-aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/logs/ship20180815T0023/
+aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/$KEY
 
 # Create submissions folder
 mkdir -p ./Mask_RCNN/samples/ship/submissions
 echo Created submissions folder
 
 echo Starting inference...
-python3 ./Mask_RCNN/samples/ship/generate_predictions.py
+python3 ./Mask_RCNN/samples/ship/generate_predictions.py --weights=./$KEY
 echo Finished inference
 
 # Upload submission to s3
 echo "Uploading submission to s3..."
-aws s3 cp ./Mask_RCNN/samples/ship/submissions  s3://airbus-kaggle/submissions --recursive
+aws s3 cp ./Mask_RCNN/samples/ship/submissions/ s3://airbus-kaggle/submissions/ --recursive
 echo Uploaded submission to s3
 
 # sudo docker run -it 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu bash ./predict.sh
