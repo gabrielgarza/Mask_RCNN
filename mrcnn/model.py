@@ -70,7 +70,7 @@ class BatchNorm(KL.BatchNormalization):
 
 def compute_backbone_shapes(config, image_shape):
     """Computes the width and height of each stage of the backbone network.
-    
+
     Returns:
         [N, (height, width)]. Where N is the number of stages
     """
@@ -808,7 +808,7 @@ class DetectionLayer(KE.Layer):
         m = parse_image_meta_graph(image_meta)
         image_shape = m['image_shape'][0]
         window = norm_boxes_graph(m['window'], image_shape[:2])
-        
+
         # Run detection refinement graph on each item in the batch
         detections_batch = utils.batch_slice(
             [rois, mrcnn_class, mrcnn_bbox, window],
@@ -2046,7 +2046,7 @@ class MaskRCNN():
                                      fc_layers_size=config.FPN_CLASSIF_FC_LAYERS_SIZE)
 
             # Detections
-            # output is [batch, num_detections, (y1, x1, y2, x2, class_id, score)] in 
+            # output is [batch, num_detections, (y1, x1, y2, x2, class_id, score)] in
             # normalized coordinates
             detections = DetectionLayer(config, name="mrcnn_detection")(
                 [rpn_rois, mrcnn_class, mrcnn_bbox, input_image_meta])
@@ -2088,7 +2088,7 @@ class MaskRCNN():
                 errno.ENOENT,
                 "Could not find model directory under {}".format(self.model_dir))
         # Pick last directory
-        dir_name = os.path.join(self.model_dir, dir_names[-1])
+        dir_name = os.path.join(self.model_dir, dir_names[-2])
         # Find the last checkpoint
         checkpoints = next(os.walk(dir_name))[2]
         checkpoints = filter(lambda f: f.startswith("mask_rcnn"), checkpoints)
@@ -2313,7 +2313,7 @@ class MaskRCNN():
                     imgaug.augmenters.GaussianBlur(sigma=(0.0, 5.0))
                 ])
 	    custom_callbacks: Optional. Add custom callbacks to be called
-	        with the keras fit_generator method. Must be list of type keras.callbacks. 
+	        with the keras fit_generator method. Must be list of type keras.callbacks.
         no_augmentation_sources: Optional. List of sources to exclude for
             augmentation. A source is string that identifies a dataset and is
             defined in the Dataset class.
@@ -2349,7 +2349,7 @@ class MaskRCNN():
             keras.callbacks.ModelCheckpoint(self.checkpoint_path,
                                             verbose=0, save_weights_only=True),
         ]
-	
+
         # Add custom callbacks to the list
         if custom_callbacks:
             callbacks += custom_callbacks

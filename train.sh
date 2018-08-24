@@ -26,7 +26,7 @@ trained_weights=`ls ../../logs/$trained_directory/ | tail -n 1`
 trained_weights_path="../../logs/$trained_directory/$trained_weights"
 
 echo Uploading $trained_weights_path to s3...
-aws s3 cp $trained_weights_path s3://airbus-kaggle/logs/$trained_directory
+aws s3 cp $trained_weights_path s3://airbus-kaggle/logs/$trained_directory/
 echo Uploaded trained weights to s3
 
 # sudo docker run -it 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu bash ./train.sh
