@@ -39,13 +39,16 @@ aws s3 cp s3://airbus-kaggle/$KEY ./Mask_RCNN/$KEY
 mkdir -p ./Mask_RCNN/samples/ship/submissions
 echo Created submissions folder
 
+# Change directory
+cd Mask_RCNN/samples/ship/
+
 echo Starting inference...
-python3 ./Mask_RCNN/samples/ship/generate_predictions.py --weights=./$KEY
+python3 ./generate_predictions.py --weights=./$KEY
 echo Finished inference
 
 # Upload submission to s3
 echo "Uploading submission to s3..."
-aws s3 cp ./Mask_RCNN/samples/ship/submissions/ s3://airbus-kaggle/submissions/ --recursive
+aws s3 cp ./submissions/ s3://airbus-kaggle/submissions/ --recursive
 echo Uploaded submission to s3
 
 # sudo docker run -it 001413338534.dkr.ecr.us-east-1.amazonaws.com/deep-learning-gpu bash ./predict.sh

@@ -75,7 +75,7 @@ if __name__ == '__main__':
     sample_sub_csv = "sample_submission.csv"
     # images_path = "datasets/val"
     # sample_sub_csv = "val_ship_segmentations.csv"
-    sample_submission_df = pd.read_csv(os.path.join(images_path,sample_sub_csv)).sample(n=1)
+    sample_submission_df = pd.read_csv(os.path.join(images_path,sample_sub_csv))
     unique_image_ids = sample_submission_df.ImageId.unique()
 
     out_pred_rows = []
