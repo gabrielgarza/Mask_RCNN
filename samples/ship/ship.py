@@ -70,7 +70,7 @@ class ShipConfig(Config):
     NUM_CLASSES = 1 + 1  # Background + ship
 
     # Number of training steps per epoch
-    STEPS_PER_EPOCH = 1000
+    STEPS_PER_EPOCH = 500
 
     # Skip detections with < 95% confidence
     DETECTION_MIN_CONFIDENCE = 0.95
