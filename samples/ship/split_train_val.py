@@ -4,15 +4,26 @@ import pandas as pd
 import numpy as np
 
 train_ship_segmentations_df = pd.read_csv(os.path.join("./datasets/train_val/train_ship_segmentations.csv"))
+# Remove corrupted image
+train_ship_segmentations_df = train_ship_segmentations_df.loc[train_ship_segmentations_df["ImageId"] != "6384c3e78.jpg"]
 
+# Undersample empty images
+# Used to remove all of them -> train_ship_segmentations_df = train_ship_segmentations_df.dropna()
+train_ship_segmentations_df_null = train_ship_segmentations_df["EncodedPixels"].isnull()
+nulls_df = train_ship_segmentations_df[train_ship_segmentations_df_null]
+nulls_sample_df = nulls_df.sample(frac=0.3) # remove frac % of empty images
+train_ship_segmentations_df = train_ship_segmentations_df.loc[~train_ship_segmentations_df["ImageId"].isin(nulls_sample_df["ImageId"])]
+
+# Select 90% random rows for train set
 msk = np.random.rand(len(train_ship_segmentations_df)) < 0.9
 
+# Split train and val sets
 train = train_ship_segmentations_df[msk]
-test = train_ship_segmentations_df[~msk]
+val = train_ship_segmentations_df[~msk]
 
 print("Total", train_ship_segmentations_df.shape)
 print("Train",len(train))
-print("Validation",len(test))
+print("Validation",len(val))
 
 #  Move train set
 for index, row in train.iterrows():
@@ -23,7 +34,7 @@ for index, row in train.iterrows():
         os.rename(old_path, new_path)
 
 # Move val set
-for index, row in test.iterrows():
+for index, row in val.iterrows():
     image_id = row["ImageId"]
     old_path = "./datasets/train_val/{}".format(image_id)
     new_path = "./datasets/val/{}".format(image_id)
@@ -45,11 +56,8 @@ file_count = len(files)
 print("files in val:", file_count)
 
 #  Save new csv files
-train = train.dropna()
-test = test.dropna()
-
 train.to_csv("./datasets/train/train_ship_segmentations.csv", index=False)
-test.to_csv("./datasets/val/val_ship_segmentations.csv", index=False)
+val.to_csv("./datasets/val/val_ship_segmentations.csv", index=False)
 
 # Verify new vsc files
 train_segs = pd.read_csv(os.path.join("./datasets/train/train_ship_segmentations.csv"))
