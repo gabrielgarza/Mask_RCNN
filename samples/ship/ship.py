@@ -272,7 +272,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=150,
+                epochs=180,
                 layers='heads')
 
 def color_splash(image, mask):
