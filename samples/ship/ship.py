@@ -181,6 +181,10 @@ class ShipDataset(utils.Dataset):
         Returns numpy array, 1 - mask, 0 - background
 
         '''
+        if not isinstance(mask_rle, str):
+            img = np.zeros(shape[0]*shape[1], dtype=np.uint8)
+            return img.reshape(shape).T
+
         s = mask_rle.split()
         starts, lengths = [np.asarray(x, dtype=int) for x in (s[0:][::2], s[1:][::2])]
         starts -= 1
