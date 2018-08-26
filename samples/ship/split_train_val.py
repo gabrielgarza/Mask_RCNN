@@ -15,7 +15,7 @@ train_ship_segmentations_df = train_ship_segmentations_df.loc[train_ship_segment
 # train_ship_segmentations_df = train_ship_segmentations_df.loc[~train_ship_segmentations_df["ImageId"].isin(nulls_sample_df["ImageId"])]
 
 # KEEP ONLY EMPTY FOR A TEST
-train_ship_segmentations_df = train_ship_segmentations_df[train_ship_segmentations_df["EncodedPixels"].isnull()]
+train_ship_segmentations_df = train_ship_segmentations_df[train_ship_segmentations_df["EncodedPixels"].isnull()].sample(frac=0.5)
 
 # Select 90% random rows for train set
 msk = np.random.rand(len(train_ship_segmentations_df)) < 0.9
