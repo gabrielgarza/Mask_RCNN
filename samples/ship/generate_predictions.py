@@ -56,6 +56,8 @@ if __name__ == '__main__':
         DETECTION_NMS_THRESHOLD = 0.0
         IMAGE_MIN_DIM = 768
         IMAGE_MAX_DIM = 768
+        RPN_ANCHOR_SCALES = (64, 96, 128, 256, 512)
+        DETECTION_MAX_INSTANCES = 20
 
     # Create model object in inference mode.
     config = InferenceConfig()
