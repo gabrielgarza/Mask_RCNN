@@ -10,9 +10,9 @@ train_ship_segmentations_df = train_ship_segmentations_df.loc[train_ship_segment
 # Undersample empty images
 # Used to remove all of them -> train_ship_segmentations_df = train_ship_segmentations_df.dropna()
 train_ship_segmentations_df_null = train_ship_segmentations_df["EncodedPixels"].isnull()
-nulls_df = train_ship_segmentations_df[~train_ship_segmentations_df_null]
-nulls_sample_df = nulls_df.sample(frac=0.99) # remove frac % of empty images
-train_ship_segmentations_df = train_ship_segmentations_df.loc[~train_ship_segmentations_df["ImageId"].isin(nulls_sample_df["ImageId"])].sample(frac=0.2)
+nulls_df = train_ship_segmentations_df[train_ship_segmentations_df_null]
+nulls_sample_df = nulls_df.sample(frac=0.5) # remove frac % of empty images
+train_ship_segmentations_df = train_ship_segmentations_df.loc[~train_ship_segmentations_df["ImageId"].isin(nulls_sample_df["ImageId"])].sample(frac=0.5)
 
 
 # Select 90% random rows for train set
