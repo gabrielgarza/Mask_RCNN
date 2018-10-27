@@ -104,9 +104,11 @@ if __name__ == '__main__':
 
             if len(re_encoded_to_rle_list) == 0:
                 out_pred_rows += [{'ImageId': image_id, 'EncodedPixels': None}]
+                print("Found Ship: ", "NO")
             else:
                 for rle_mask in re_encoded_to_rle_list:
                     out_pred_rows += [{'ImageId': image_id, 'EncodedPixels': rle_mask}]
+                    print("Found Ship: ", rle_mask)
 
             toc = time.clock()
             print("Prediction time: ",toc-tic)
